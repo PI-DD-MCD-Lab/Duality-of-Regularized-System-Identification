@@ -4,7 +4,7 @@ MATLAB code accompanying the paper **Duality of Time and Frequency Domain Kernel
 
 The paper establishes sufficient conditions for duality between time-domain and frequency-domain kernel-based regularized estimates, including hyperparameter estimation. This repository provides discrete-time numerical examples using the diagonal/correlated (DC) kernel, with nonparametric transient modeling and comparisons with alternative transient treatments and a prediction error method (PEM).
 
-**The original full-experiment script is `Automatica_main.m`, and the original saved experiment results are in `Auto_Data/`. The script `example_for_small_data.m` uses only 10 systems for illustration.** The full input dataset (approximately 1.6 GB) is separate from these saved results and is not included in the repository.
+**Important!: If you want run code faster, then replace ratio = 5 with ratio = 1 in `rfir_eb_td_grok.m` and `rfir_eb_td_grok.m`**.
 
 ## Repository contents
 
