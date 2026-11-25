@@ -91,7 +91,7 @@ if sum(strcmp(kernel, {'DC'}))
 end
 
 % Optimize initial hyperparameters using MultiStart
-ratio = 1;
+ratio = 5;
 if sum(strcmp(kernel, {'TC','DC'})) %      c_sign is useless for these kernels
     objFunc =@(x) objective_function(x, Phi, Yt, pre_ind, kernel, lb, ub, configs);
     ms =  MultiStart('FunctionTolerance',1e-10,'UseParallel',false);
