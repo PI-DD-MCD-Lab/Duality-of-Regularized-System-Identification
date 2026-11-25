@@ -1,4 +1,4 @@
-# Duality of Time and Frequency Domain Kernel-Based Regularized System Identification
+# Duality of Regularized System Identification
 
 MATLAB code accompanying the paper **Duality of Time and Frequency Domain Kernel-Based Regularized System Identification**, by **Xiaozhu Fang, Yu Xu, and Tianshi Chen**.
 
