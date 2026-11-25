@@ -128,7 +128,7 @@ The current scripts evaluate the following eight configurations in order. EIR de
 | 3 | Time | FRF model with transient estimation |
 | 4 | Time | EIR model with transient estimation |
 | 5 | Time | EIR model without transient estimation (`eir-no-t`; prewindowing comparison) |
-| 6 | Time | EIR model with truncation setting 125 |
+| 6 | Time | EIR model with truncation setting 125  （Not included in the paper）|
 | 7 | Time | Truncated FIR model with the first 125 output samples discarded (`cut`) |
 | 8 | Time | PEM baseline using `n4sid` followed by `tfest` |
 
