@@ -1,6 +1,6 @@
 # Duality of Regularized System Identification
 
-MATLAB code accompanying the paper **Duality of Time and Frequency Domain Kernel-Based Regularized System Identification**, by **Xiaozhu Fang, Yu Xu, and Tianshi Chen**.
+MATLAB code accompanying the paper **Duality of Time and Frequency Domain Kernel-Based Regularized System Identification**, by **Xiaozhu Fang, Yu Xu, and Tianshi Chen**. The testing databanks (1.6 GB) are saved in https://sandbox.zenodo.org/records/648679.  
 
 The paper establishes sufficient conditions for duality between time-domain and frequency-domain kernel-based regularized estimates, including hyperparameter estimation. This repository provides discrete-time numerical examples using the diagonal/correlated (DC) kernel, with nonparametric transient modeling and comparisons with alternative transient treatments and a prediction error method (PEM).
 
