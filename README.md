@@ -4,7 +4,7 @@ MATLAB code accompanying the paper **Duality of Time and Frequency Domain Kernel
 
 The paper establishes sufficient conditions for duality between time-domain and frequency-domain kernel-based regularized estimates, including hyperparameter estimation. This repository provides discrete-time numerical examples using the diagonal/correlated (DC) kernel, with nonparametric transient modeling and comparisons with alternative transient treatments and a prediction error method (PEM).
 
-**Important!: If you want run codes faster, then please reduce the number of runs in MultiStart by replacing ratio = 5 with ratio = 1 in `rfir_eb_td_grok.m` and `rfir_eb_td_grok.m`**.
+**Important!: If you want run codes faster, then please reduce the number of runs in MultiStart by replacing ratio = 5 with ratio = 1 in `rfir_eb_td.m` and `rfir_eb_fd.m`**.
 
 ## Repository contents
 
@@ -14,8 +14,8 @@ The paper establishes sufficient conditions for duality between time-domain and 
 | [`Auto_Data/`](Auto_Data/) | Original saved results for the four data banks, including fit scores, objective values, and hyperparameters. These files can be inspected without rerunning the experiments. |
 | [`example_for_small_data.m`](example_for_small_data.m) | Serial illustration using only 10 systems from S1D1*. |
 | [`s1d1star_sysfrom1to10.mat`](s1d1star_sysfrom1to10.mat) | Input data and true models for the 10-system illustration. |
-| [`rfir_eb_td_grok.m`](rfir_eb_td_grok.m) | Time-domain kernel-based regularized estimator. |
-| [`rfir_eb_fd_grok.m`](rfir_eb_fd_grok.m) | Frequency-domain kernel-based regularized estimator. |
+| [`rfir_eb_td.m`](rfir_eb_td.m) | Time-domain kernel-based regularized estimator. |
+| [`rfir_eb_fd.m`](rfir_eb_fd.m) | Frequency-domain kernel-based regularized estimator. |
 | [`LICENSE`](LICENSE) | MIT license for the code. |
 
 The `Dataset_TAC2025_` prefix in saved filenames is retained from the original implementation.
@@ -84,8 +84,8 @@ Each input file must contain `sys` and `dat` cell arrays: `sys{ii}` is the true 
    ```text
    repository-root/
    ├── Automatica_main.m
-   ├── rfir_eb_td_grok.m
-   ├── rfir_eb_fd_grok.m
+   ├── rfir_eb_td.m
+   ├── rfir_eb_fd.m
    ├── Auto_Data/                  # Included original results
    └── raw_data/                   # Full input data, downloaded separately
        ├── s1d1star.mat

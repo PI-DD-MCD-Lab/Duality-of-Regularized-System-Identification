@@ -13,7 +13,7 @@
 
 % p.s. the program is time-comsuming to find a good hyperparameters in
 % MultiStart (because there are local minima), one may tune ``ratio=5'' in
-% rfir_eb_td_grok and rfir_eb_fd_grok to tradeoff the the time and local minima;
+% rfir_eb_td and rfir_eb_fd to tradeoff the the time and local minima;
 
 % More efficienct codes with matrix approxiamtion can refer to Xuyu's codes
 
@@ -143,10 +143,10 @@ for c_idx = 1:num_configs
     % Model estimation
     switch domain
         case 'fd'
-            [fh, obj, hp] = rfir_eb_fd_grok(kernel, iddata(Y, U, 1), we, configs);
+            [fh, obj, hp] = rfir_eb_fd(kernel, iddata(Y, U, 1), we, configs);
             th = ifft(fh, 'symmetric'); % impulse response g(0) to g(n-1)
         case 'td'
-            [th, obj, hp] = rfir_eb_td_grok(kernel, z, 1:(n-1), configs);
+            [th, obj, hp] = rfir_eb_td(kernel, z, 1:(n-1), configs);
             th = [0; th]; % impulse response  g(0) to g(n-1), where g(0)=0
         case 'pem'
             sysest=  tfest(z, n4sid(z,'best',  n4sidOptions('Focus','simulation'))) ;
@@ -154,7 +154,7 @@ for c_idx = 1:num_configs
             obj=nan;
             hp=nan;
         case 'pw'
-            [th, obj, hp] = rfir_eb_td_grok(kernel, [iddata(zeros(configs{2}-1,1),zeros(configs{2}-1,1)); z], 1:(n-1), configs);
+            [th, obj, hp] = rfir_eb_td(kernel, [iddata(zeros(configs{2}-1,1),zeros(configs{2}-1,1)); z], 1:(n-1), configs);
             th = [0; th]; % impulse response  g(0) to g(n-1), where g(0)=0
     end
     

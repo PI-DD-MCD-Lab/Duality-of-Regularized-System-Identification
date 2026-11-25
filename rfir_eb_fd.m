@@ -1,5 +1,5 @@
-function  [th, obj, hp] = rfir_eb_fd_grok(kernel,data, pre_ind, configs)
-% RFIR_EB_FD_GROK Estimates impulse response in frequency domain using empirical Bayes
+function  [th, obj, hp] = rfir_eb_fd(kernel,data, pre_ind, configs)
+% RFIR_EB_FD Estimates impulse response in frequency domain using empirical Bayes
 % Inputs:
 %   kernel  - String specifying the kernel type (only 'DC' supported currently)
 %   data    - iddata object containing input and output signals (single experiment)

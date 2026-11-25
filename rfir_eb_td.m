@@ -1,4 +1,4 @@
-function  [th, obj, hp] = rfir_eb_td_grok(kernel,data, pre_ind, configs)
+function  [th, obj, hp] = rfir_eb_td(kernel,data, pre_ind, configs)
 % RFIR_EB_TD Estimates impulse response using empirical Bayes with a Gaussian process prior.
 % Inputs:
 %   kernel  - String specifying the kernel type (only 'DC' supported currently)
