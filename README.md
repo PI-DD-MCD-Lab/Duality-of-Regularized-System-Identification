@@ -116,19 +116,6 @@ Each input file must contain `sys` and `dat` cell arrays: `sys{ii}` is the true 
 
 4. Run `Automatica_main` from the repository root. It processes all four banks and saves `Dataset_TAC2025_<bank>.mat` in the selected data folder. A rerun writes to the same result filenames.
 
-### Inspecting the included original results
-
-From the repository root, load a result file directly:
-
-```matlab
-R = load(fullfile('Auto_Data', 'Dataset_TAC2025_s1d1star.mat'));
-fit_g = vertcat(R.gFIT{:});
-mean_fit_g = mean(fit_g, 1)
-capped_mean_fit_g = mean(max(fit_g, -100), 1)
-R.algorithm
-```
-
-The capped mean replaces fits below -100 with -100 before averaging, following the convention in the paper.
 
 ## Estimation configurations and outputs
 
@@ -156,20 +143,12 @@ Saved result files contain:
 | `HP` | Hyperparameter vectors returned by the optimizers. |
 | `algorithm` | Estimator configurations and their ordering. |
 
-Each of the first five variables is a cell array with one entry per system. Use the saved `algorithm` variable when interpreting its columns. `OBJ` and `HP` are `NaN` for PEM. The current scripts do not populate the PEM frequency-response prediction, so its `GINF` entry should not be used as a PEM performance measure.
 
-## Reproducibility notes
-
-- Hyperparameter estimation uses `MultiStart` with `fmincon`, followed by `fminsearch` refinement. Random starting points and local minima can lead to differences between runs.
-- The current time-domain estimator sets `ratio = 1` (5 starts), while the frequency-domain estimator sets `ratio = 5` (25 starts). The manuscript describes five starts per hyperparameter. Set `ratio = 5` in both estimator files to match that optimization budget; increasing it also increases runtime.
-- The scripts evaluate frequency responses on `50*n = 6250` bins. The manuscript describes `50*N` bins for the inverse-transform approximation. Account for this setting when comparing a fresh run with the manuscript.
-- The scripts do not set a random seed internally. The quick-start seed controls the serial example's random stream; reproducible parallel runs additionally require control of worker random streams.
-- The full driver is computationally demanding. The included original results allow inspection of the full experiment without rerunning it.
 
 ## Citation and license
 
 If you use this code, please cite:
 
-> Xiaozhu Fang, Yu Xu, and Tianshi Chen. *Duality of Time and Frequency Domain Kernel-Based Regularized System Identification*.
+> Xiaozhu Fang, Yu Xu, and Tianshi Chen. *Duality of Time and Frequency Domain Kernel-Based Regularized System Identification*. Submitted to Automatica. 2026
 
 The code is distributed under the [MIT License](LICENSE).
