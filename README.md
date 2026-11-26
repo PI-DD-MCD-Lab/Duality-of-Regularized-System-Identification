@@ -1,6 +1,6 @@
 # Duality of Regularized System Identification
 
-MATLAB code accompanying the paper **Duality of Time and Frequency Domain Kernel-Based Regularized System Identification**, by **Xiaozhu Fang, Yu Xu, and Tianshi Chen**.
+MATLAB code accompanying the paper **Duality of Time and Frequency Domain Kernel-Based Regularized System Identification**, by **Xiaozhu Fang, Yu Xu, and Tianshi Chen**. The testing databanks (1.6 GB) are saved in https://sandbox.zenodo.org/records/648679.  
 
 The paper establishes sufficient conditions for duality between time-domain and frequency-domain kernel-based regularized estimates, including hyperparameter estimation. This repository provides discrete-time numerical examples using the diagonal/correlated (DC) kernel, with nonparametric transient modeling and comparisons with alternative transient treatments and a prediction error method (PEM).
 
@@ -11,7 +11,7 @@ Set `configs{3}` near the top of either experiment script to choose the number o
 | File or folder | Purpose |
 | --- | --- |
 | [`Automatica_main.m`](Automatica_main.m) | Original experiment driver: 2,500 systems in each of four data banks. Requires the full input dataset and local path/parallel-pool configuration. |
-| [`Auto_Data/`](Auto_Data/) | Original saved results for the four data banks, including fit scores, objective values, and hyperparameters. These files can be inspected without rerunning the experiments. |
+| [`Automatica_Dataresult/`](Auto_Data/) | Original saved results for the four data banks, including fit scores, objective values, and hyperparameters. These files can be inspected without rerunning the experiments. |
 | [`example_for_small_data.m`](example_for_small_data.m) | Serial illustration using only 10 systems from S1D1*. |
 | [`s1d1star_sysfrom1to10.mat`](s1d1star_sysfrom1to10.mat) | Input data and true models for the 10-system illustration. |
 | [`rfir_eb_td.m`](rfir_eb_td.m) | Time-domain kernel-based regularized estimator. |
