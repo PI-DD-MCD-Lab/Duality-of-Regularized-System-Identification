@@ -4,7 +4,7 @@ MATLAB code accompanying the paper **Duality of Time and Frequency Domain Kernel
 
 The paper establishes sufficient conditions for duality between time-domain and frequency-domain kernel-based regularized estimates, including hyperparameter estimation. This repository provides discrete-time numerical examples using the diagonal/correlated (DC) kernel, with nonparametric transient modeling and comparisons with alternative transient treatments and a prediction error method (PEM).
 
-**Important!: If you want run codes faster, then please reduce the number of runs in MultiStart by replacing ratio = 5 with ratio = 1 in `rfir_eb_td.m` and `rfir_eb_fd.m`**.
+Set `configs{3}` near the top of either experiment script to choose the number of MultiStart runs per hyperparameter. With five hyperparameters, the default `configs{3} = 5` gives 25 starts. Set it to `1` for five starts.
 
 ## Repository contents
 
@@ -16,6 +16,7 @@ The paper establishes sufficient conditions for duality between time-domain and 
 | [`s1d1star_sysfrom1to10.mat`](s1d1star_sysfrom1to10.mat) | Input data and true models for the 10-system illustration. |
 | [`rfir_eb_td.m`](rfir_eb_td.m) | Time-domain kernel-based regularized estimator. |
 | [`rfir_eb_fd.m`](rfir_eb_fd.m) | Frequency-domain kernel-based regularized estimator. |
+| [`rfir_eb_td_grad.m`](rfir_eb_td_grad.m), [`rfir_eb_fd_grad.m`](rfir_eb_fd_grad.m) | Time- and frequency-domain estimators with an analytic marginal-likelihood gradient and Hessian. |
 | [`LICENSE`](LICENSE) | MIT license for the code. |
 
 The `Dataset_TAC2025_` prefix in saved filenames is retained from the original implementation.
@@ -29,6 +30,37 @@ Use MATLAB with the following toolboxes:
 - **Optimization Toolbox**: `fmincon`.
 - **Global Optimization Toolbox**: `MultiStart`.
 - **Parallel Computing Toolbox**: required by `Automatica_main.m` as written; the 10-system example runs serially.
+
+## Using the analytic gradient and Hessian
+
+`Automatica_main.m` uses the gradient estimators. To use them in `example_for_small_data.m`, replace calls to `rfir_eb_td` with `rfir_eb_td_grad` and calls to `rfir_eb_fd` with `rfir_eb_fd_grad`. The inputs and first three outputs are identical. These EIR examples use the variables from the scripts' `estimate_models` function.
+
+```matlab
+configs = {"eir", "off", 5};
+[g, Jt, xt] = rfir_eb_td_grad(kernel, z, 1:(n-1), configs);
+[G, Jf, xf, objective] = rfir_eb_fd_grad(kernel, iddata(Y, U, 1), we, configs);
+[value, gradient, H] = objective(xf);
+```
+
+Both estimators offer the fourth output `objective`. It evaluates the paper's criterion $y^H M^{-1}y + \log\det M$ at any valid five-element log-hyperparameter vector. The gradient is a column vector and the Hessian is a real symmetric $5\times5$ matrix, ordered as $\log\alpha$, $\log\beta$, $\log c_1$, $\log c_2$, and $\log\sigma^2$. In the time-domain `eir-no-t` and `cut` configurations the transient is disabled, so the fourth gradient entry and the fourth row and column of the Hessian are zero.
+
+For covariance derivatives $M_i=\partial M/\partial x_i$ and $M_{ij}=\partial^2 M/(\partial x_i\partial x_j)$, write $A=M^{-1}$, $a=Ay$, and $P=A-aa^H$. The implementation uses Cholesky solves to evaluate
+
+$$
+g_i=\operatorname{Re}\operatorname{tr}(P M_i), \qquad
+H_{ij}=\operatorname{Re}\!\left[\operatorname{tr}(P M_{ij}-A M_i A M_j)+2a^H M_i A M_j a\right].
+$$
+
+Each bounded `MultiStart` run supplies the gradient and Hessian to `fmincon`. The subsequent unbounded `fminsearch` refinement uses objective values only. Exact derivatives can reduce the number of optimizer evaluations. Each Hessian evaluation also requires covariance derivatives and additional matrix solves, so elapsed time depends on the record length and model.
+
+For a timing comparison, we used the last 375 samples of the first bundled S1D1* system, normalized the output as in the drivers, and ran one bounded `fmincon` solve per method in MATLAB R2020b with one computational thread. Both methods started at `log([0.2; 0.03; 1; 0.2; 0.1])`. The table gives wall time and the objective evaluation count reported by `fmincon`.
+
+| Model | Original | With derivatives | Speedup |
+| --- | ---: | ---: | ---: |
+| Time-domain EIR | 13.06 s (333 evaluations) | 1.89 s (10 evaluations) | 6.9× |
+| Frequency-domain FRF | 25.74 s (222 evaluations) | 7.07 s (13 evaluations) | 3.6× |
+
+The final objective values agreed within $8\times10^{-6}$ in both comparisons. A separate end-to-end check used the last 40 samples of the same system and all 25 starts with `rng(20261126,'twister')`. Across two runs with the execution order reversed, the time-domain FRF estimator was 2.07–2.09× faster and the frequency-domain EIR estimator was 3.17–3.95× faster, including the final refinement. To check the derivatives against central differences for all seven kernel configurations, run `runtests('tests/test_rfir_eb_derivatives.m')` from the repository root.
 
 ## Quick start: 10-system illustration
 

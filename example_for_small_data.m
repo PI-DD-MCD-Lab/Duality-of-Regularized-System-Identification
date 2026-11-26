@@ -11,15 +11,12 @@
 %
 % @ Xiaozhu Fang 2025/11/17
 
-% p.s. the program is time-comsuming to find a good hyperparameters in
-% MultiStart (because there are local minima), one may tune ``ratio=1'' in
-% rfir_eb_td and rfir_eb_fd to tradeoff the the time and local minima;
-
 % More efficienct codes with matrix approxiamtion can refer to Xuyu's codes
 
 %% Initialization
 clear; clc; close all;  % Simplified clear commands
 echo off
+configs{3} = 5; % MultiStart runs per hyperparameter (5 gives 25 starts).
 
 
 % 
@@ -54,13 +51,13 @@ for ibank = 1:numel(databank)
       OBJ = cell(num_iters,1); % cost function of hyperparameter estimation
       HP = cell(num_iters,1); % hyperparameters
       algorithm = {
-          {'DC', {"frf","off"}, 'fd'}
-          {'DC', {"eir","off"}, 'fd'}
-          {'DC', {"frf","off"}, 'td'}
-          {'DC', {"eir","off"}, 'td'}
-          {'DC', {"eir-no-t","off"}, 'td'}
-          {'DC', {"eir",125}, 'td'}
-          {'DC', {"cut",125}, 'td'}
+          {'DC', {"frf","off",configs{3}}, 'fd'}
+          {'DC', {"eir","off",configs{3}}, 'fd'}
+          {'DC', {"frf","off",configs{3}}, 'td'}
+          {'DC', {"eir","off",configs{3}}, 'td'}
+          {'DC', {"eir-no-t","off",configs{3}}, 'td'}
+          {'DC', {"eir",125,configs{3}}, 'td'}
+          {'DC', {"cut",125,configs{3}}, 'td'}
           {'DC', {"cut",125}, 'pem'}
           };
     for ii = 1:num_iters

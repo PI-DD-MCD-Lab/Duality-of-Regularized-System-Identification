@@ -4,7 +4,7 @@ function  [th, obj, hp] = rfir_eb_td(kernel,data, pre_ind, configs)
 %   kernel  - String specifying the kernel type (only 'DC' supported currently)
 %   data    - iddata object containing input and output signals (single experiment)
 %   pre_ind - Numeric vector/scalar of prediction indices (converted to column if row)
-%   configs     - Cell array with configuration options (e.g., {'frf'}, {'eir'}, {'cut', n})
+%   configs     - Model options, e.g., {"eir","off",5}; configs{3} sets starts per hyperparameter.
 % Outputs:
 %   th      - Estimated impulse response coefficients
 %   obj     - Optimized objective value (negative log-likelihood)
@@ -91,14 +91,16 @@ if sum(strcmp(kernel, {'DC'}))
 end
 
 % Optimize initial hyperparameters using MultiStart
-ratio = 5;
+if numel(configs) < 3
+    configs{3} = 5; % Default for existing two-entry configurations.
+end
 if sum(strcmp(kernel, {'TC','DC'})) %      c_sign is useless for these kernels
     objFunc =@(x) objective_function(x, Phi, Yt, pre_ind, kernel, lb, ub, configs);
     ms =  MultiStart('FunctionTolerance',1e-10,'UseParallel',false);
     ms.StartPointsToRun='bounds';
     ms.Display='off';
     problem = createOptimProblem('fmincon', 'x0', rand(size(lbga)), 'objective', objFunc, 'lb', lbga, 'ub', ubga);
-    [hpini ,~,~] =  run(ms, problem, ratio*length(lbga));
+    [hpini ,~,~] =  run(ms, problem, configs{3}*length(lbga));
 end
 
 function [obj, condNb, xest] =  objective_function(hyper, Phi, Yt, pre_ind, kernel, lb, ub, configs)
